@@ -183,6 +183,7 @@ class WeekView<T> @JvmOverloads constructor(
 
     override fun invalidate() {
         super.invalidate()
+        eventChipsLoader.changed = true
         viewState.invalidate()
     }
 
