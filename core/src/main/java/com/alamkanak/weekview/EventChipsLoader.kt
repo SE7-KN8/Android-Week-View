@@ -5,11 +5,14 @@ internal class EventChipsLoader<T>(
     private val chipCache: EventChipCache<T>
 ) {
 
+    var changed = true
+
     private val eventSplitter = WeekViewEventSplitter<T>(config)
 
     fun createAndCacheEventChips(events: List<WeekViewEvent<T>>) {
         chipCache.clear()
         chipCache += convertEventsToEventChips(events)
+        changed = true
     }
 
     private fun convertEventsToEventChips(

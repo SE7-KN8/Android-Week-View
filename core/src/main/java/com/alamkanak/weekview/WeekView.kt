@@ -16,9 +16,9 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 class WeekView<T> @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr), WeekViewViewState.Listener {
 
     private val configWrapper: WeekViewConfigWrapper by lazy {
@@ -37,7 +37,7 @@ class WeekView<T> @JvmOverloads constructor(
 
     private val viewState = WeekViewViewState(configWrapper, this)
     private val gestureHandler =
-        WeekViewGestureHandler(this, configWrapper, eventChipCache, gestureListener)
+            WeekViewGestureHandler(this, configWrapper, eventChipCache, gestureListener)
 
     private val drawingContext = DrawingContext(configWrapper)
 
@@ -52,23 +52,23 @@ class WeekView<T> @JvmOverloads constructor(
     // Be careful when changing the order of the updaters, as the calculation of any updater might
     // depend on results of previous updaters
     private val updaters = listOf(
-        MultiLineDayLabelHeightUpdater(configWrapper, cache),
-        AllDayEventsUpdater(this, configWrapper, cache, eventCache, eventChipCache),
-        HeaderRowHeightUpdater(configWrapper, eventCache),
-        SingleEventsUpdater(this, configWrapper, eventChipCache)
+            MultiLineDayLabelHeightUpdater(configWrapper, cache),
+            AllDayEventsUpdater(this, configWrapper, cache, eventCache, eventChipCache),
+            HeaderRowHeightUpdater(configWrapper, eventCache),
+            SingleEventsUpdater(this, configWrapper, eventChipCache)
     )
 
     // Be careful when changing the order of the drawers, as that might cause
     // views to incorrectly draw over each other
     private val drawers = listOf(
-        DayBackgroundDrawer(this, configWrapper),
-        BackgroundGridDrawer(this, configWrapper),
-        SingleEventsDrawer(context, configWrapper, eventChipCache),
-        NowLineDrawer(configWrapper),
-        TimeColumnDrawer(this, configWrapper),
-        HeaderRowDrawer(this, configWrapper),
-        DayLabelDrawer(configWrapper, cache),
-        AllDayEventsDrawer(context, configWrapper, cache)
+            DayBackgroundDrawer(this, configWrapper),
+            BackgroundGridDrawer(this, configWrapper),
+            SingleEventsDrawer(context, configWrapper, eventChipCache),
+            NowLineDrawer(configWrapper),
+            TimeColumnDrawer(this, configWrapper),
+            HeaderRowDrawer(this, configWrapper),
+            DayLabelDrawer(configWrapper, cache),
+            AllDayEventsDrawer(context, configWrapper, cache)
     )
 
     override fun onDraw(canvas: Canvas) {
@@ -95,8 +95,11 @@ class WeekView<T> @JvmOverloads constructor(
         if (events.isNullOrEmpty()) {
             eventChipCache.clear()
         } else {
-            eventChipsLoader.createAndCacheEventChips(events)
-            eventChipsExpander.calculateEventChipPositions()
+            if (eventChipsLoader.changed) {
+                eventChipsLoader.createAndCacheEventChips(events)
+                eventChipsExpander.calculateEventChipPositions()
+                eventChipsLoader.changed = false
+            }
         }
     }
 
@@ -242,8 +245,8 @@ class WeekView<T> @JvmOverloads constructor(
      */
 
     @Deprecated(
-        "Use isShowHeaderRowBottomLine",
-        ReplaceWith("isShowHeaderRowBottomLine")
+            "Use isShowHeaderRowBottomLine",
+            ReplaceWith("isShowHeaderRowBottomLine")
     )
     fun getShowHeaderRowBottomLine() = isShowHeaderRowBottomLine
 
@@ -348,8 +351,8 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     @Deprecated(
-        "Use isShowTimeColumnHourSeparator",
-        ReplaceWith("isShowTimeColumnHourSeparator")
+            "Use isShowTimeColumnHourSeparator",
+            ReplaceWith("isShowTimeColumnHourSeparator")
     )
     fun showTimeColumnHourSeparator() = isShowTimeColumnHourSeparator
 
@@ -382,8 +385,8 @@ class WeekView<T> @JvmOverloads constructor(
      */
 
     @Deprecated(
-        "Use isShowTimeColumnSeparator",
-        ReplaceWith("isShowTimeColumnSeparator")
+            "Use isShowTimeColumnSeparator",
+            ReplaceWith("isShowTimeColumnSeparator")
     )
     fun getShowTimeColumnSeparator() = isShowTimeColumnSeparator
 
@@ -524,8 +527,8 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     @Deprecated(
-        "Use defaultEventTextColor",
-        ReplaceWith("defaultEventTextColor")
+            "Use defaultEventTextColor",
+            ReplaceWith("defaultEventTextColor")
     )
     var eventTextColor: Int
         get() = defaultEventTextColor
@@ -860,8 +863,8 @@ class WeekView<T> @JvmOverloads constructor(
      */
 
     @Deprecated(
-        "Use isShowHourSeparators",
-        ReplaceWith("isShowHourSeparators")
+            "Use isShowHourSeparators",
+            ReplaceWith("isShowHourSeparators")
     )
     fun showHourSeparators() = isShowHourSeparators
 
@@ -895,8 +898,8 @@ class WeekView<T> @JvmOverloads constructor(
      */
 
     @Deprecated(
-        "Use isShowDaySeparators",
-        ReplaceWith("isShowDaySeparators")
+            "Use isShowDaySeparators",
+            ReplaceWith("isShowDaySeparators")
     )
     fun showDaySeparators() = isShowDaySeparators
 
@@ -1075,8 +1078,8 @@ class WeekView<T> @JvmOverloads constructor(
      */
 
     @Deprecated(
-        "Use firstVisibleDate",
-        ReplaceWith("firstVisibleDate")
+            "Use firstVisibleDate",
+            ReplaceWith("firstVisibleDate")
     )
     val firstVisibleDay: Calendar?
         get() = viewState.firstVisibleDate?.copy()
@@ -1088,8 +1091,8 @@ class WeekView<T> @JvmOverloads constructor(
         get() = viewState.firstVisibleDate?.copy()
 
     @Deprecated(
-        "Use lastVisibleDate",
-        ReplaceWith("lastVisibleDate")
+            "Use lastVisibleDate",
+            ReplaceWith("lastVisibleDate")
     )
     val lastVisibleDay: Calendar?
         get() = viewState.lastVisibleDate?.copy()
@@ -1213,7 +1216,7 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     fun setOnEventClickListener(
-        block: (data: T, rect: RectF) -> Unit
+            block: (data: T, rect: RectF) -> Unit
     ) {
         onEventClickListener = object : OnEventClickListener<T> {
             override fun onEventClick(data: T, eventRect: RectF) {
@@ -1223,8 +1226,8 @@ class WeekView<T> @JvmOverloads constructor(
     }
 
     @Deprecated(
-        "Use onMonthChangeListener",
-        ReplaceWith("onMonthChangeListener")
+            "Use onMonthChangeListener",
+            ReplaceWith("onMonthChangeListener")
     )
     fun getMonthChangeListener() = onMonthChangeListener
 
@@ -1238,20 +1241,20 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     @Deprecated(
-        "Use onMonthChangeListener",
-        ReplaceWith("onMonthChangeListener")
+            "Use onMonthChangeListener",
+            ReplaceWith("onMonthChangeListener")
     )
     fun setMonthChangeListener(listener: OnMonthChangeListener<T>) {
         onMonthChangeListener = listener
     }
 
     fun setOnMonthChangeListener(
-        block: (startDate: Calendar, endDate: Calendar) -> List<WeekViewDisplayable<T>>
+            block: (startDate: Calendar, endDate: Calendar) -> List<WeekViewDisplayable<T>>
     ) {
         onMonthChangeListener = object : OnMonthChangeListener<T> {
             override fun onMonthChange(
-                startDate: Calendar,
-                endDate: Calendar
+                    startDate: Calendar,
+                    endDate: Calendar
             ): List<WeekViewDisplayable<T>> {
                 return block(startDate, endDate)
             }
@@ -1284,7 +1287,7 @@ class WeekView<T> @JvmOverloads constructor(
      * similar to an [OnMonthChangeListener], but does not require anything to be returned.
      */
     fun setOnLoadMoreListener(
-        block: (startDate: Calendar, endDate: Calendar) -> Unit
+            block: (startDate: Calendar, endDate: Calendar) -> Unit
     ) {
         onLoadMoreListener = object : OnLoadMoreListener {
             override fun onLoadMore(startDate: Calendar, endDate: Calendar) {
@@ -1294,22 +1297,22 @@ class WeekView<T> @JvmOverloads constructor(
     }
 
     @Deprecated(
-        "Use onEventLongClickListener",
-        ReplaceWith("onEventLongClickListener")
+            "Use onEventLongClickListener",
+            ReplaceWith("onEventLongClickListener")
     )
     val eventLongPressListener = onEventLongClickListener
 
     @Deprecated(
-        "Use onEventLongClickListener",
-        ReplaceWith("onEventLongClickListener")
+            "Use onEventLongClickListener",
+            ReplaceWith("onEventLongClickListener")
     )
     fun setEventLongPressListener(listener: EventLongPressListener<T>) {
         onEventLongClickListener = listener
     }
 
     @Deprecated(
-        "Use onEventLongClickListener",
-        ReplaceWith("onEventLongClickListener")
+            "Use onEventLongClickListener",
+            ReplaceWith("onEventLongClickListener")
     )
     var onEventLongPressListener: OnEventLongPressListener<T>?
         get() = onEventLongClickListener
@@ -1324,17 +1327,17 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     @Deprecated(
-        "Use setOnEventLongClickListener",
-        ReplaceWith("setOnEventLongClickListener(data, rect)")
+            "Use setOnEventLongClickListener",
+            ReplaceWith("setOnEventLongClickListener(data, rect)")
     )
     fun setOnEventLongPressListener(
-        block: (data: T, rect: RectF) -> Unit
+            block: (data: T, rect: RectF) -> Unit
     ) {
         setOnEventLongClickListener(block)
     }
 
     fun setOnEventLongClickListener(
-        block: (data: T, rect: RectF) -> Unit
+            block: (data: T, rect: RectF) -> Unit
     ) {
         onEventLongClickListener = object : OnEventLongClickListener<T> {
             override fun onEventLongClick(data: T, eventRect: RectF) {
@@ -1344,8 +1347,8 @@ class WeekView<T> @JvmOverloads constructor(
     }
 
     @Deprecated(
-        "Use onEmptyViewClickListener",
-        ReplaceWith("onEmptyViewClickListener")
+            "Use onEmptyViewClickListener",
+            ReplaceWith("onEmptyViewClickListener")
     )
     val emptyViewClickListener = onEmptyViewClickListener
 
@@ -1356,15 +1359,15 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     @Deprecated(
-        "Use onEmptyViewClickListener",
-        ReplaceWith("onEmptyViewClickListener")
+            "Use onEmptyViewClickListener",
+            ReplaceWith("onEmptyViewClickListener")
     )
     fun setEmptyViewClickListener(listener: EmptyViewClickListener) {
         onEmptyViewClickListener = listener
     }
 
     fun setOnEmptyViewClickListener(
-        block: (time: Calendar) -> Unit
+            block: (time: Calendar) -> Unit
     ) {
         onEmptyViewClickListener = object : OnEmptyViewClickListener {
             override fun onEmptyViewClicked(time: Calendar) {
@@ -1374,14 +1377,14 @@ class WeekView<T> @JvmOverloads constructor(
     }
 
     @Deprecated(
-        "Use onEmptyViewLongClickListener",
-        ReplaceWith("onEmptyViewLongClickListener")
+            "Use onEmptyViewLongClickListener",
+            ReplaceWith("onEmptyViewLongClickListener")
     )
     val emptyViewLongPressListener = onEmptyViewLongClickListener
 
     @Deprecated(
-        "Use onEmptyViewLongClickListener",
-        ReplaceWith("onEmptyViewLongClickListener")
+            "Use onEmptyViewLongClickListener",
+            ReplaceWith("onEmptyViewLongClickListener")
     )
     var onEmptyViewLongPressListener: OnEmptyViewLongPressListener?
         get() = onEmptyViewLongClickListener
@@ -1396,25 +1399,25 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     @Deprecated(
-        "Use onEmptyViewLongClickListener",
-        ReplaceWith("onEmptyViewLongClickListener")
+            "Use onEmptyViewLongClickListener",
+            ReplaceWith("onEmptyViewLongClickListener")
     )
     fun setEmptyViewLongPressListener(listener: EmptyViewLongPressListener) {
         onEmptyViewLongClickListener = listener
     }
 
     @Deprecated(
-        "Use setOnEmptyViewLongClickListener",
-        ReplaceWith("setOnEmptyViewLongClickListener(block)")
+            "Use setOnEmptyViewLongClickListener",
+            ReplaceWith("setOnEmptyViewLongClickListener(block)")
     )
     fun setOnEmptyViewLongPressListener(
-        block: (time: Calendar) -> Unit
+            block: (time: Calendar) -> Unit
     ) {
         setOnEmptyViewLongClickListener(block)
     }
 
     fun setOnEmptyViewLongClickListener(
-        block: (time: Calendar) -> Unit
+            block: (time: Calendar) -> Unit
     ) {
         onEmptyViewLongClickListener = object : OnEmptyViewLongClickListener {
             override fun onEmptyViewLongClick(time: Calendar) {
@@ -1430,7 +1433,7 @@ class WeekView<T> @JvmOverloads constructor(
         }
 
     fun setScrollListener(
-        block: (date: Calendar) -> Unit
+            block: (date: Calendar) -> Unit
     ) {
         scrollListener = object : ScrollListener {
             override fun onFirstVisibleDateChanged(date: Calendar) {
@@ -1440,10 +1443,10 @@ class WeekView<T> @JvmOverloads constructor(
     }
 
     @Deprecated(
-        "Use setScrollListener(block: (Calendar) -> Unit)"
+            "Use setScrollListener(block: (Calendar) -> Unit)"
     )
     fun setScrollListener(
-        block: (newFirstVisibleDate: Calendar?, oldFirstVisibleDate: Calendar?) -> Unit
+            block: (newFirstVisibleDate: Calendar?, oldFirstVisibleDate: Calendar?) -> Unit
     ) {
         scrollListener = object : ScrollListener {
             override fun onFirstVisibleDateChanged(date: Calendar) {
@@ -1455,7 +1458,7 @@ class WeekView<T> @JvmOverloads constructor(
     var onRangeChangeListener: OnRangeChangeListener? = null
 
     fun setOnRangeChangeListener(
-        block: (firstVisibleDate: Calendar, lastVisibleDate: Calendar) -> Unit
+            block: (firstVisibleDate: Calendar, lastVisibleDate: Calendar) -> Unit
     ) {
         onRangeChangeListener = object : OnRangeChangeListener {
             override fun onRangeChanged(firstVisibleDate: Calendar, lastVisibleDate: Calendar) {
@@ -1473,7 +1476,7 @@ class WeekView<T> @JvmOverloads constructor(
 
     private fun clearCaches() {
         drawers
-            .filterIsInstance(CachingDrawer::class.java)
-            .forEach { it.clear() }
+                .filterIsInstance(CachingDrawer::class.java)
+                .forEach { it.clear() }
     }
 }
